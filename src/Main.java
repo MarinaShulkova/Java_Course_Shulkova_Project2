@@ -9,8 +9,8 @@ public class Main<flag> {
     static String[][] users = {{"user", "user", String.valueOf(Roles.USER)},
             {"admin", "admin", String.valueOf(Roles.ADMIN)},
             {"moderator", "moderator", String.valueOf(Roles.MODERATOR)}};
-    // создание массива заметок
-    static Notes[] notesArray = new Notes[5];
+
+    static Notes[] notesArray = new Notes[5]; //создание массива заметок
     static int searchedNote = 0; //Индекс найденной заметки
 
 
@@ -23,19 +23,18 @@ public class Main<flag> {
 
     //Процедура menu_print(int) - вывод меню, где int = 0 - основное меню, 1 - дополнительное
     public static int menu_print(int menu_type) throws MenuException {
-
         if (menu_type == 0) {
-
             System.out.println("1 Relogin \n" +
                     "2 New note \n" +
                     "3 Search note by name \n" +
-                    "4 Exit \n");
+                    "4 Exit \n" +
+                    "5 Print array of notes (*)");
 
             System.out.println("Choose menu item: ");
             Scanner scr = new Scanner(System.in);
             int menu_item = scr.nextInt();
             try {
-                if (menu_item <= 0 || menu_item > 4) {
+                if (menu_item <= 0 || menu_item > 5) {
                     throw new MenuException(menu_item);
                 }
             } catch (MenuException me) {
@@ -47,7 +46,6 @@ public class Main<flag> {
 */
             }
             return (menu_item);
-
         } else {
             System.out.println();
             System.out.println(
@@ -57,35 +55,31 @@ public class Main<flag> {
                             "4 Change text of note \n" +
                             "5 Print note's author \n" +
                             "6 Delete note \n" +
-                            "7 Main menu \n" +
-                            "8 Print array");
+                            "7 Main menu \n" );
 
             System.out.println("Choose menu item: ");
             Scanner scr = new Scanner(System.in);
             int menu_item = scr.nextInt();
             try {
-                if (menu_item <= 0 || menu_item > 8) {
+                if (menu_item <= 0 || menu_item > 7) {
                     throw new MenuException(menu_item);
                 }
             } catch (MenuException me) {
                 System.out.println(me.getMenu() + " - Invalid value, please try again!");
                 menu_print(0);
+// ВОПРОС: как обрабатывать с помощью исключния вводимые символы типа String?
 /*            } catch (InputMismatchException e) {
                 System.out.println("Invalid value, please try again!");
                 menu_print(0);
             }
 */
             }
-            return (menu_item + 4);
-
+            return (menu_item + 5);
         }
     }
 
-
     // Процедура обработки меню menu()
-
     public static void menu(int menu) {
-        //       Class<? extends Notes> note; //Notes note;// = new Books("","","");
         switch (menu) {
             case 1:
                 login();
@@ -96,26 +90,23 @@ public class Main<flag> {
                         case 1:
                             Notes book = new Books("", "", "");
                             notesArray[emptyIndex()] = book.addNote(user.username, book);
-                            //                       book.print(notesArray[searchedNote]);
                             System.out.println();
                             menu(menu_print(0));
                             break;
                         case 2:
                             Notes movie = new Movies("", "", "", "");
                             notesArray[emptyIndex()] = movie.addNote(user.username, movie);
-//                        movie.print(notesArray[searchedNote]);
                             System.out.println();
                             menu(menu_print(0));
                             break;
                         case 3:
                             Notes recipe = new Recipes("", "");
                             notesArray[emptyIndex()] = recipe.addNote(user.username, recipe);
-                            //                      recipe.print(notesArray[searchedNote]);
                             System.out.println();
                             menu(menu_print(0));
                             break;
                         default:
-                            System.out.println("Выбрано неверное значение"); //// ИСКЛЮЧЕНИЯ!!!
+                            System.out.println("Invalid value. Try again");
                     }
                 } else System.out.println("Insufficient user rights for create notes");
                 menu(menu_print(0));
@@ -127,40 +118,38 @@ public class Main<flag> {
             case 4:
                 System.exit(0);
             case 5:
+                printArray(notesArray);
+                menu(menu_print(0));
+            case 6:
                 notesArray[searchedNote].print(notesArray[searchedNote]);
                 menu(menu_print(1));
                 break; // вызов процедуры вывода заметки в консоль
-            case 6:
-                changeName(searchedNote);
+            case 7:
+                if (user.role != Roles.USER) changeName(searchedNote); else System.out.println("Insufficient user rights for create notes");
                 menu(menu_print(1));
                 break; // вызов процедуры изменения названия заметки
-            case 7:
-                changeWord(searchedNote);
+            case 8:
+                if (user.role != Roles.USER) changeWord(searchedNote); else System.out.println("Insufficient user rights for create notes");
                 menu(menu_print(1));
                 break; // вызов процедуры замены слова в заметке
-            case 8:
-                changeBody(searchedNote);
+            case 9:
+                if (user.role != Roles.USER) changeBody(searchedNote); else System.out.println("Insufficient user rights for create notes");
                 menu(menu_print(1));
                 break; // вызов процедуры замены тела заметки
-            case 9:
+            case 10:
                 printAuthor(searchedNote);
                 menu(menu_print(1));
                 break; // вызов процедуры вывода автора заметки
-            case 10:
-                deleteNote(searchedNote);
+            case 11:
+                if (user.role != Roles.USER) deleteNote(searchedNote); else System.out.println("Insufficient user rights for create notes");
                 menu(menu_print(0));
                 break; // вызов процедуры удаления заметки
-            case 11:
+            case 12:
                 menu(menu_print(0));
                 break; // возврат в основное меню
-            case 12:
-                printArray(notesArray);
-                menu(menu_print(0));
         }
-
     }
-
-    // Процедура авторизации текущего пользователя
+// Процедура авторизации текущего пользователя
     public static boolean login() {
         Scanner scr = new Scanner(System.in);
         for (int i = 0; i < 2; i++) {
@@ -175,7 +164,7 @@ public class Main<flag> {
                     break;
             }
         }
-        // проверка введённых данных с пользователями в массиве
+// проверка введённых данных с пользователями в массиве
         for (int i = 0; i < users.length; i++) {
             if (users[i][0].equals(user.username) && users[i][1].equals(user.password)) {
                 user.role = Roles.valueOf(users[i][2]);
@@ -188,20 +177,19 @@ public class Main<flag> {
         return login_flag;
     }
 
-    // Процедура инициализации типа заметки addNoteType()
+// Процедура инициализации типа заметки addNoteType()
     public static int addNoteType() {
         Scanner scr = new Scanner(System.in);
         System.out.println("Choose note type: \n1. Book\n2. Movie\n3. Recipe");
         int noteType = scr.nextInt();
         return noteType;
-    }
+        }
 
-    // Процедура поиска заметки по названию
+// Процедура поиска заметки по названию
     public static int searchNote() throws NameException {
         Scanner scr = new Scanner(System.in);
         System.out.println("Enter note name to search");
         String noteName = scr.nextLine();
-
 
         for (int i = 0; i < 5; i++) {
             if (notesArray[i] == null || notesArray[i].noteName == null) continue;
@@ -211,7 +199,6 @@ public class Main<flag> {
         if (noteName != "")
             System.out.printf("There is no any notes with %s name", noteName);
         System.out.println();
-
         try {
             if (noteName == "") {
                 throw new NameException();
@@ -219,13 +206,11 @@ public class Main<flag> {
         } catch (NameException ne) {
             System.out.println("You didn't enter any note. Please, choose menu 3 and enter note name to search");
             System.out.println();
-
         }
-        return -1;                                                      ////////// Exception !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+        return -1;
     }
 
-    // Процедура переименования заметки
+// Процедура переименования заметки
     public static void changeName(int index) {
         Scanner scr = new Scanner(System.in);
         System.out.println("Enter new note name: ");
@@ -234,7 +219,7 @@ public class Main<flag> {
         System.out.println("Note name is changed to " + noteName);
     }
 
-    // Процедура изменения тела заметки
+// Процедура изменения тела заметки
     public static void changeBody(int index) {
         Scanner scr = new Scanner(System.in);
         System.out.println("Enter new text of note: ");
@@ -242,20 +227,18 @@ public class Main<flag> {
         notesArray[index].noteBody = noteBody;
         System.out.println("Note name is changed to " + noteBody);
     }
-
-    // Процедура вывода автора заметки
+// Процедура вывода автора заметки
     public static void printAuthor(int index) {
         System.out.println("Note's author name is " + notesArray[index].noteAuthor);
     }
 
-    // Процедура удаления заметки
+// Процедура удаления заметки
     public static void deleteNote(int index) {
         System.out.println("Note " + notesArray[index].noteName + " is deleted.");
         notesArray[index].noteName = null;
-
     }
 
-    // Процедура удаления заметки
+// Процедура удаления заметки
     public static void changeWord(int index) {
         Scanner scr = new Scanner(System.in);
         System.out.println("Enter changed word: ");
@@ -274,6 +257,7 @@ public class Main<flag> {
         System.out.println("Word" + wordOld + "Changed to " + wordNew);
     }
 
+// Процедура вывода массива заметок
     public static void printArray(Notes[] array) {
         for (Notes notes : array) {
             System.out.print("notesArray[]: ");
@@ -282,7 +266,7 @@ public class Main<flag> {
         }
     }
 
-
+// Процедура поиска первого свободного индекса в массиве заметок
     public static int emptyIndex() {
         for (int i = 0; i < notesArray.length; i++) {
             if (notesArray[i] == null || notesArray[i].noteName == null) {

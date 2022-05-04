@@ -1,4 +1,3 @@
-
 import java.util.Scanner;
 
 public class Recipes extends Notes  {
@@ -36,6 +35,6 @@ public class Recipes extends Notes  {
 
     @Override
     public String toString() {
-        return noteName + noteAuthor + recipeName + recipeCalories + noteBody;
+        return noteName + " " + noteAuthor + " " + recipeName + " " + recipeCalories + " " + noteBody;
     }
 }

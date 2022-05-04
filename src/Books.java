@@ -1,6 +1,4 @@
-import java.awt.print.Book;
 import java.util.Scanner;
-
 public class Books extends Notes {
     String bookName;
     String bookWriter;
@@ -40,6 +38,6 @@ public class Books extends Notes {
 
     @Override
     public String toString() {
-        return noteName + noteAuthor + bookName + bookWriter + bookPublisher + noteBody;
+        return noteName + " " + noteAuthor + " " + bookName + " " + bookWriter + " " + bookPublisher + " " + noteBody;
     }
 }

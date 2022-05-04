@@ -1,5 +1,4 @@
 import java.util.Scanner;
-
 public class Movies extends Notes {
     String movieName;
     String movieDate;
@@ -43,6 +42,6 @@ public class Movies extends Notes {
 
     @Override
     public String toString() {
-        return noteName + noteAuthor + movieName + movieDate + movieGenre + movieRating + noteBody;
+        return noteName + " " + noteAuthor + " " + movieName + " " + movieDate + " " + movieGenre + " " + movieRating + " " + noteBody;
     }
 }
